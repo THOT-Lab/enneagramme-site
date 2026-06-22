@@ -1,0 +1,23 @@
+[
+  {
+    "id": "formation-1",
+    "date": "15 juin 2026",
+    "time": "09h30 - 17h30",
+    "place": "Paris",
+    "topic": "Découvrir les 9 ennéatypes"
+  },
+  {
+    "id": "formation-2",
+    "date": "28 juin 2026",
+    "time": "09h30 - 17h30",
+    "place": "Lyon",
+    "topic": "Blessures profondes et mécanismes de défense"
+  },
+  {
+    "id": "formation-3",
+    "date": "12 juillet 2026",
+    "time": "09h30 - 17h30",
+    "place": "En ligne",
+    "topic": "Ennéagramme et relations humaines"
+  }
+]

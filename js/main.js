@@ -1,0 +1,684 @@
+/*
+  Site Ennéagramme - JavaScript principal
+  ------------------------------------------------------------
+  Données :
+  - En publication web, le site charge data/formations.json et data/translations.json.
+  - En ouverture directe de index.html, certains navigateurs bloquent fetch(file://).
+    Les constantes ci-dessous servent donc de secours local.
+  - Pour connecter les inscriptions à un service externe, remplacer la fonction
+    saveRegistration() en bas de fichier.
+*/
+
+const DEFAULT_FORMATIONS = [
+  {
+    id: "formation-1",
+    date: "15 juin 2026",
+    time: "09h30 - 17h30",
+    place: "Paris",
+    topic: "Découvrir les 9 ennéatypes"
+  },
+  {
+    id: "formation-2",
+    date: "28 juin 2026",
+    time: "09h30 - 17h30",
+    place: "Lyon",
+    topic: "Blessures profondes et mécanismes de défense"
+  },
+  {
+    id: "formation-3",
+    date: "12 juillet 2026",
+    time: "09h30 - 17h30",
+    place: "En ligne",
+    topic: "Ennéagramme et relations humaines"
+  }
+];
+
+const DEFAULT_TRANSLATIONS = {
+  fr: {
+    site: { title: "Ennéagramme", subtitle: "Le chemin vers l'éveil" },
+    nav: {
+      home: "Accueil",
+      formations: "Formations",
+      types: "Aborder les Ennéatypes",
+      trainers: "Les formateurs"
+    },
+    hero: {
+      eyebrow: "Formation et connaissance de soi",
+      title: "Ennéagramme",
+      subtitle: "Le chemin vers l'éveil",
+      text: "L'Ennéagramme est une carte de compréhension de soi et des autres. Il décrit neuf grandes dynamiques intérieures, chacune reliée à une manière de percevoir le monde, de se protéger, d'aimer, de décider et d'évoluer. Utilisé avec justesse, il devient un outil d'éveil, de lucidité et de transformation personnelle.",
+      cta: "Formations"
+    },
+    formations: {
+      eyebrow: "Parcours et ateliers",
+      title: "Formations",
+      intro: "Des journées pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle, relationnelle et professionnelle.",
+      date: "Date",
+      time: "Horaire",
+      place: "Lieu",
+      topic: "Sujet",
+      action: "Action",
+      register: "S'inscrire",
+      add: "Ajouter une formation",
+      delete: "Supprimer"
+    },
+    registration: {
+      back: "Retour aux formations",
+      eyebrow: "Inscription",
+      title: "Demande d'inscription",
+      firstName: "Prénom",
+      lastName: "Nom",
+      phone: "Téléphone",
+      email: "Email",
+      submit: "Valider",
+      success: "Merci, votre demande d'inscription a bien été enregistrée. Nous vous recontacterons prochainement."
+    },
+    types: {
+      eyebrow: "Neuf chemins de conscience",
+      title: "Aborder les Ennéatypes",
+      intro: "Les ennéatypes désignent neuf structures fondamentales de personnalité. Ils ne doivent pas être compris comme des étiquettes fixes, mais comme des dynamiques intérieures : des manières de chercher la sécurité, la reconnaissance, l'amour ou le contrôle. Dans notre approche, chaque ennéatype est abordé à partir de sa blessure profonde, c'est-à-dire le point sensible autour duquel se sont construits ses réflexes, ses défenses et son chemin possible d'éveil.",
+      wound: "Blessure profonde",
+      mechanism: "Mécanisme principal",
+      path: "Chemin d'évolution",
+      items: [
+        { number: 1, name: "Le Perfectionniste", emblem: "balance", wound: "Sentiment intime que l'amour et la sécurité dépendent de la rectitude, de l'effort juste et d'une forme d'irréprochabilité. Derrière l'exigence apparaît souvent une grande sensibilité à l'injustice et à la faute.", mechanism: "Corriger, contrôler, améliorer et comparer ce qui est à ce qui devrait être. Le mental repère vite l'écart, la tension ou l'erreur possible.", path: "Accueillir l'imperfection sans renoncer à la justesse, relâcher le juge intérieur et retrouver une paix qui ne dépend plus de la perfection." },
+        { number: 2, name: "L'Altruiste", emblem: "heart", wound: "Peur profonde de ne pas être aimé pour soi-même, comme si l'affection devait être gagnée par la disponibilité, l'attention ou le don.", mechanism: "Aider, anticiper les besoins, deviner les attentes et se rendre indispensable, parfois au prix d'une fatigue ou d'un oubli de soi.", path: "Reconnaître ses propres besoins, apprendre à recevoir simplement et découvrir qu'un lien vrai ne demande pas de se sacrifier." },
+        { number: 3, name: "Le Battant", emblem: "arrow", wound: "Impression que la valeur personnelle dépend de la réussite, de l'efficacité et du regard porté sur ce qui est accompli.", mechanism: "Performer, séduire, s'adapter à l'image attendue et avancer vers les objectifs avec une grande énergie d'action.", path: "Ralentir, écouter ce qui est réellement ressenti et retrouver l'authenticité derrière l'image de réussite ou de maîtrise." },
+        { number: 4, name: "Le Romantique", emblem: "moon", wound: "Sentiment de manque, d'exil intérieur ou de différence irréductible, avec l'impression qu'une part essentielle est absente ou perdue.", mechanism: "Intensifier l'expérience, comparer ce qui est présent à ce qui manque, rechercher l'unique, le beau ou le profondément signifiant.", path: "Habiter pleinement le présent, reconnaître la valeur de ce qui est déjà là et laisser l'émotion devenir un passage plutôt qu'une identité." },
+        { number: 5, name: "L'Observateur", emblem: "eye", wound: "Peur d'être envahi, sollicité ou vidé de ses ressources, comme si le monde demandait toujours plus que ce qui est disponible.", mechanism: "Comprendre, observer, se retirer et économiser son énergie. La distance devient une manière de préserver la clarté et l'autonomie.", path: "Revenir au corps, au lien et à l'action concrète, partager sa présence et découvrir que l'implication peut nourrir au lieu d'épuiser." },
+        { number: 6, name: "Le Loyaliste", emblem: "shield", wound: "Insécurité fondamentale, souvent vécue comme une vigilance intérieure face à ce qui pourrait manquer, déraper ou trahir la confiance.", mechanism: "Douter, anticiper les scénarios, tester la fiabilité des personnes ou des cadres et chercher des garanties avant de s'engager pleinement.", path: "Développer la confiance intérieure, distinguer l'intuition de la peur et avancer pas à pas sans demander au mental de tout sécuriser." },
+        { number: 7, name: "L'Épicurien", emblem: "sun", wound: "Peur de la souffrance, de la limitation ou de l'enfermement, avec le besoin de garder des issues ouvertes et des possibles vivants.", mechanism: "Multiplier les possibles, stimuler l'enthousiasme, déplacer l'attention vers l'agréable et éviter ce qui semble trop lourd ou contraignant.", path: "Traverser l'inconfort sans fuir, choisir en profondeur et découvrir une joie plus stable, moins dépendante de la nouveauté." },
+        { number: 8, name: "Le Protecteur", emblem: "mountain", wound: "Peur de la vulnérabilité, de l'impuissance ou de la domination, avec une attention instinctive aux rapports de force.", mechanism: "Contrôler, protéger, trancher et s'imposer pour éviter la faiblesse ou défendre ce qui paraît juste et vivant.", path: "Retrouver la tendresse, consentir à la vulnérabilité et transformer la force en juste puissance au service du lien." },
+        { number: 9, name: "Le Médiateur", emblem: "circle", wound: "Peur du conflit, de la séparation ou de la perte d'harmonie, avec une tendance à sentir très fortement les tensions ambiantes.", mechanism: "S'effacer, temporiser, relativiser les désaccords et maintenir l'harmonie, parfois au détriment de son propre élan.", path: "Affirmer sa place, clarifier son désir propre et découvrir que la paix véritable peut inclure une parole nette." }
+      ]
+    },
+    trainers: {
+      eyebrow: "Transmission",
+      title: "Les formateurs",
+      intro: "Une approche pédagogique claire, enracinée dans l'expérience humaine et attentive au rythme de chacun.",
+      yves: {
+        name: "Yves Kovacs",
+        bio: "Yves Kovacs accompagne depuis plusieurs années des personnes et des groupes dans la découverte de l'Ennéagramme comme outil de connaissance de soi, de transformation intérieure et de clarification relationnelle. Son approche articule précision pédagogique, profondeur humaine et attention aux blessures fondamentales propres à chaque ennéatype."
+      }
+    },
+    testimonials: {
+      eyebrow: "Expériences",
+      title: "Témoignages",
+      items: [
+        "Une formation claire, profonde et directement utile.",
+        "Une approche sensible, structurée et transformante.",
+        "J'ai découvert une nouvelle manière de comprendre mes mécanismes intérieurs."
+      ]
+    },
+    footer: { text: "Ennéagramme - Le chemin vers l'éveil" },
+    admin: {
+      button: "Mode édition",
+      enabled: "Mode édition actif",
+      export: "Exporter les données",
+      wrongPassword: "Mot de passe incorrect."
+    }
+  },
+  es: {
+    site: { title: "Eneagrama", subtitle: "El camino hacia el despertar" },
+    nav: { home: "Inicio", formations: "Formaciones", types: "Abordar los Eneatipos", trainers: "Los formadores" },
+    hero: {
+      eyebrow: "Formación y autoconocimiento",
+      title: "Eneagrama",
+      subtitle: "El camino hacia el despertar",
+      text: "El Eneagrama es un mapa para comprenderse a uno mismo y a los demás. Describe nueve grandes dinámicas interiores, cada una vinculada a una forma de percibir el mundo, protegerse, amar, decidir y evolucionar. Usado con precisión, se convierte en una herramienta de despertar, lucidez y transformación personal.",
+      cta: "Formaciones"
+    },
+    formations: {
+      eyebrow: "Recorridos y talleres",
+      title: "Formaciones",
+      intro: "Jornadas para descubrir, profundizar e integrar el Eneagrama en la vida personal, relacional y profesional.",
+      date: "Fecha",
+      time: "Horario",
+      place: "Lugar",
+      topic: "Tema",
+      action: "Acción",
+      register: "Inscribirse",
+      add: "Añadir una formación",
+      delete: "Eliminar"
+    },
+    registration: {
+      back: "Volver a formaciones",
+      eyebrow: "Inscripción",
+      title: "Solicitud de inscripción",
+      firstName: "Nombre",
+      lastName: "Apellido",
+      phone: "Teléfono",
+      email: "Email",
+      submit: "Validar",
+      success: "Gracias, su solicitud de inscripción ha sido registrada. Nos pondremos en contacto próximamente."
+    },
+    types: {
+      eyebrow: "Nueve caminos de conciencia",
+      title: "Abordar los Eneatipos",
+      intro: "Los eneatipos designan nueve estructuras fundamentales de personalidad. No deben entenderse como etiquetas fijas, sino como dinámicas interiores: formas de buscar seguridad, reconocimiento, amor o control. En nuestro enfoque, cada eneatipo se aborda desde su herida profunda, es decir, el punto sensible alrededor del cual se construyeron sus reflejos, defensas y posible camino de despertar.",
+      wound: "Herida profunda",
+      mechanism: "Mecanismo principal",
+      path: "Camino de evolución",
+      items: [
+        { number: 1, name: "El Perfeccionista", emblem: "balance", wound: "Sensación íntima de que el amor y la seguridad dependen de la rectitud, del esfuerzo justo y de ser irreprochable. Detrás de la exigencia suele aparecer una gran sensibilidad ante la injusticia y el error.", mechanism: "Corregir, controlar, mejorar y comparar lo que es con lo que debería ser. La mente detecta rápido la distancia, la tensión o el posible error.", path: "Acoger la imperfección sin abandonar la justeza, soltar al juez interior y recuperar una paz que ya no dependa de la perfección." },
+        { number: 2, name: "El Altruista", emblem: "heart", wound: "Miedo profundo a no ser amado por sí mismo, como si el afecto tuviera que ganarse mediante la disponibilidad, la atención o la entrega.", mechanism: "Ayudar, anticipar necesidades, adivinar expectativas y volverse indispensable, a veces al precio del cansancio o del olvido de sí.", path: "Reconocer las propias necesidades, aprender a recibir con sencillez y descubrir que un vínculo verdadero no exige sacrificarse." },
+        { number: 3, name: "El Triunfador", emblem: "arrow", wound: "Impresión de que el valor personal depende del éxito, de la eficacia y de la mirada puesta sobre lo logrado.", mechanism: "Rendir, seducir, adaptarse a la imagen esperada y avanzar hacia los objetivos con una gran energía de acción.", path: "Ralentizar, escuchar lo que realmente se siente y recuperar la autenticidad detrás de la imagen de éxito o dominio." },
+        { number: 4, name: "El Romántico", emblem: "moon", wound: "Sensación de carencia, exilio interior o diferencia irreductible, con la impresión de que una parte esencial está ausente o perdida.", mechanism: "Intensificar la experiencia, comparar lo presente con lo que falta y buscar lo único, lo bello o lo profundamente significativo.", path: "Habitar plenamente el presente, reconocer el valor de lo que ya está y dejar que la emoción sea un tránsito más que una identidad." },
+        { number: 5, name: "El Observador", emblem: "eye", wound: "Miedo a ser invadido, solicitado o vaciado de recursos, como si el mundo pidiera siempre más de lo disponible.", mechanism: "Comprender, observar, retirarse y economizar energía. La distancia se vuelve una forma de preservar claridad y autonomía.", path: "Volver al cuerpo, al vínculo y a la acción concreta, compartir la presencia y descubrir que implicarse también puede nutrir." },
+        { number: 6, name: "El Leal", emblem: "shield", wound: "Inseguridad fundamental, a menudo vivida como una vigilancia interior ante lo que podría faltar, fallar o traicionar la confianza.", mechanism: "Dudar, anticipar escenarios, probar la fiabilidad de personas o marcos y buscar garantías antes de comprometerse plenamente.", path: "Desarrollar la confianza interior, distinguir la intuición del miedo y avanzar paso a paso sin pedirle a la mente que lo asegure todo." },
+        { number: 7, name: "El Epicúreo", emblem: "sun", wound: "Miedo al sufrimiento, a la limitación o al encierro, con la necesidad de mantener salidas abiertas y posibilidades vivas.", mechanism: "Multiplicar posibilidades, estimular el entusiasmo, llevar la atención hacia lo agradable y evitar lo que parece pesado o restrictivo.", path: "Atravesar la incomodidad sin huir, elegir con profundidad y descubrir una alegría más estable, menos dependiente de la novedad." },
+        { number: 8, name: "El Protector", emblem: "mountain", wound: "Miedo a la vulnerabilidad, a la impotencia o a la dominación, con una atención instintiva a las relaciones de fuerza.", mechanism: "Controlar, proteger, decidir y afirmarse para evitar la debilidad o defender lo que parece justo y vivo.", path: "Recuperar la ternura, consentir la vulnerabilidad y transformar la fuerza en potencia justa al servicio del vínculo." },
+        { number: 9, name: "El Mediador", emblem: "circle", wound: "Miedo al conflicto, a la separación o a la pérdida de armonía, con una tendencia a sentir con fuerza las tensiones del entorno.", mechanism: "Borrarse, postergar, relativizar los desacuerdos y mantener la armonía, a veces en detrimento del propio impulso.", path: "Afirmar el propio lugar, clarificar el deseo personal y descubrir que la paz verdadera puede incluir una palabra clara." }
+      ]
+    },
+    trainers: {
+      eyebrow: "Transmisión",
+      title: "Los formadores",
+      intro: "Un enfoque pedagógico claro, arraigado en la experiencia humana y atento al ritmo de cada persona.",
+      yves: {
+        name: "Yves Kovacs",
+        bio: "Yves Kovacs acompaña desde hace varios años a personas y grupos en el descubrimiento del Eneagrama como herramienta de autoconocimiento, transformación interior y clarificación relacional. Su enfoque articula precisión pedagógica, profundidad humana y atención a las heridas fundamentales propias de cada eneatipo."
+      }
+    },
+    testimonials: {
+      eyebrow: "Experiencias",
+      title: "Testimonios",
+      items: [
+        "Una formación clara, profunda y directamente útil.",
+        "Un enfoque sensible, estructurado y transformador.",
+        "Descubrí una nueva manera de comprender mis mecanismos interiores."
+      ]
+    },
+    footer: { text: "Eneagrama - El camino hacia el despertar" },
+    admin: { button: "Modo edición", enabled: "Modo edición activo", export: "Exportar datos", wrongPassword: "Contraseña incorrecta." }
+  },
+  en: {
+    site: { title: "Enneagram", subtitle: "The path toward awakening" },
+    nav: { home: "Home", formations: "Trainings", types: "Approaching the Enneatypes", trainers: "The trainers" },
+    hero: {
+      eyebrow: "Training and self-knowledge",
+      title: "Enneagram",
+      subtitle: "The path toward awakening",
+      text: "The Enneagram is a map for understanding oneself and others. It describes nine major inner dynamics, each connected to a way of perceiving the world, protecting oneself, loving, deciding and evolving. Used with care, it becomes a tool for awakening, clarity and personal transformation.",
+      cta: "Trainings"
+    },
+    formations: {
+      eyebrow: "Programs and workshops",
+      title: "Trainings",
+      intro: "One-day sessions to discover, deepen and integrate the Enneagram into personal, relational and professional life.",
+      date: "Date",
+      time: "Time",
+      place: "Place",
+      topic: "Topic",
+      action: "Action",
+      register: "Register",
+      add: "Add a training",
+      delete: "Delete"
+    },
+    registration: {
+      back: "Back to trainings",
+      eyebrow: "Registration",
+      title: "Registration request",
+      firstName: "First name",
+      lastName: "Last name",
+      phone: "Phone",
+      email: "Email",
+      submit: "Submit",
+      success: "Thank you, your registration request has been saved. We will contact you soon."
+    },
+    types: {
+      eyebrow: "Nine paths of awareness",
+      title: "Approaching the Enneatypes",
+      intro: "Enneatypes refer to nine fundamental personality structures. They should not be understood as fixed labels, but as inner dynamics: ways of seeking safety, recognition, love or control. In our approach, each enneatype is explored through its deep wound, the sensitive point around which its reflexes, defenses and possible path of awakening were built.",
+      wound: "Deep wound",
+      mechanism: "Main mechanism",
+      path: "Path of growth",
+      items: [
+        { number: 1, name: "The Perfectionist", emblem: "balance", wound: "The inner feeling that love and safety depend on righteousness, right effort and being beyond reproach. Beneath the high standards often lives a deep sensitivity to injustice and mistakes.", mechanism: "Correcting, controlling, improving and comparing what is with what should be. The mind quickly notices gaps, tension and possible errors.", path: "Welcoming imperfection without abandoning discernment, softening the inner judge and recovering a peace that no longer depends on perfection." },
+        { number: 2, name: "The Helper", emblem: "heart", wound: "A deep fear of not being loved for oneself, as if affection had to be earned through availability, attention or giving.", mechanism: "Helping, anticipating needs, sensing expectations and becoming indispensable, sometimes at the cost of fatigue or self-forgetting.", path: "Recognizing one's own needs, learning to receive simply and discovering that true connection does not require self-sacrifice." },
+        { number: 3, name: "The Achiever", emblem: "arrow", wound: "The impression that personal worth depends on success, efficiency and the way accomplishments are seen by others.", mechanism: "Performing, charming, adapting to the expected image and moving toward goals with powerful action energy.", path: "Slowing down, listening to what is genuinely felt and recovering authenticity behind the image of success or mastery." },
+        { number: 4, name: "The Romantic", emblem: "moon", wound: "A feeling of lack, inner exile or irreducible difference, as if something essential were absent or lost.", mechanism: "Intensifying experience, comparing what is present with what is missing, and seeking what is unique, beautiful or deeply meaningful.", path: "Fully inhabiting the present, recognizing the value of what is already here and letting emotion become a passage rather than an identity." },
+        { number: 5, name: "The Observer", emblem: "eye", wound: "Fear of being invaded, solicited or depleted, as if the world were always asking for more than is available.", mechanism: "Understanding, observing, withdrawing and conserving energy. Distance becomes a way to preserve clarity and autonomy.", path: "Returning to the body, connection and concrete action, sharing presence and discovering that involvement can nourish rather than exhaust." },
+        { number: 6, name: "The Loyalist", emblem: "shield", wound: "Fundamental insecurity, often lived as inner vigilance toward what could be missing, go wrong or betray trust.", mechanism: "Doubting, anticipating scenarios, testing the reliability of people or structures and seeking guarantees before fully committing.", path: "Developing inner trust, distinguishing intuition from fear and moving step by step without asking the mind to secure everything." },
+        { number: 7, name: "The Epicurean", emblem: "sun", wound: "Fear of suffering, limitation or confinement, with a need to keep exits open and possibilities alive.", mechanism: "Multiplying possibilities, stimulating enthusiasm, shifting attention toward what feels pleasant and avoiding what seems heavy or restrictive.", path: "Moving through discomfort without fleeing, choosing with depth and discovering a steadier joy that depends less on novelty." },
+        { number: 8, name: "The Protector", emblem: "mountain", wound: "Fear of vulnerability, powerlessness or domination, with an instinctive attention to power dynamics.", mechanism: "Controlling, protecting, deciding and asserting force to avoid weakness or defend what feels just and alive.", path: "Recovering tenderness, consenting to vulnerability and transforming strength into right power in service of connection." },
+        { number: 9, name: "The Mediator", emblem: "circle", wound: "Fear of conflict, separation or loss of harmony, with a tendency to strongly feel tensions in the surrounding atmosphere.", mechanism: "Fading out, delaying, smoothing over disagreement and maintaining harmony, sometimes at the expense of one's own movement.", path: "Affirming one's place, clarifying personal desire and discovering that true peace can include a clear voice." }
+      ]
+    },
+    trainers: {
+      eyebrow: "Transmission",
+      title: "The trainers",
+      intro: "A clear teaching approach, rooted in human experience and attentive to each person's pace.",
+      yves: {
+        name: "Yves Kovacs",
+        bio: "Yves Kovacs has spent several years guiding individuals and groups in discovering the Enneagram as a tool for self-knowledge, inner transformation and relational clarity. His approach combines pedagogical precision, human depth and attention to the fundamental wounds specific to each enneatype."
+      }
+    },
+    testimonials: {
+      eyebrow: "Experiences",
+      title: "Testimonials",
+      items: [
+        "Clear, deep and directly useful training.",
+        "A sensitive, structured and transformative approach.",
+        "I discovered a new way to understand my inner mechanisms."
+      ]
+    },
+    footer: { text: "Enneagram - The path toward awakening" },
+    admin: { button: "Edit mode", enabled: "Edit mode active", export: "Export data", wrongPassword: "Incorrect password." }
+  }
+};
+
+const state = {
+  lang: "fr",
+  isAdmin: false,
+  selectedType: 1,
+  selectedFormation: null,
+  formations: [],
+  translations: {}
+};
+
+document.addEventListener("DOMContentLoaded", init);
+
+async function init() {
+  state.formations = await loadJson("data/formations.json", DEFAULT_FORMATIONS);
+  state.translations = await loadJson("data/translations.json", DEFAULT_TRANSLATIONS);
+
+  bindNavigation();
+  bindLanguageSwitcher();
+  bindAdmin();
+  bindRegistration();
+  prepareTrainerImages();
+  renderAll();
+}
+
+async function loadJson(url, fallback) {
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Impossible de charger ${url}`);
+    return await response.json();
+  } catch (error) {
+    return JSON.parse(JSON.stringify(fallback));
+  }
+}
+
+function renderAll() {
+  applyTranslations();
+  renderFormations();
+  renderEnneagram("home-enneagram", false);
+  renderEnneagram("types-enneagram", true);
+  renderTypeCard(state.selectedType);
+  setEditableMode(state.isAdmin);
+}
+
+function t(path) {
+  return getByPath(state.translations[state.lang], path) ?? getByPath(DEFAULT_TRANSLATIONS.fr, path) ?? "";
+}
+
+function getByPath(source, path) {
+  return path.split(".").reduce((value, key) => (value == null ? undefined : value[key]), source);
+}
+
+function setByPath(source, path, nextValue) {
+  const keys = path.split(".");
+  const last = keys.pop();
+  const target = keys.reduce((value, key) => {
+    if (value[key] == null) value[key] = {};
+    return value[key];
+  }, source);
+  target[last] = nextValue;
+}
+
+function applyTranslations() {
+  document.documentElement.lang = state.lang;
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = t(element.dataset.i18n);
+    if (typeof value === "string" && document.activeElement !== element) {
+      element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll(".language-switcher button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === state.lang);
+  });
+}
+
+function bindNavigation() {
+  const menuButton = document.querySelector(".mobile-menu-button");
+  const nav = document.querySelector("#main-nav");
+  menuButton.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("is-open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+  });
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      menuButton.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+function bindLanguageSwitcher() {
+  document.querySelectorAll(".language-switcher button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.lang = button.dataset.lang;
+      renderAll();
+    });
+  });
+}
+
+function renderEnneagram(containerId, interactive) {
+  const container = document.getElementById(containerId);
+  const types = state.translations[state.lang].types.items;
+  const center = 260;
+  const nodeRadius = interactive ? 160 : 184;
+  const labelRadius = 222;
+  const linePoints = Object.fromEntries(
+    types.map((type) => [type.number, pointForType(type.number, center, nodeRadius)])
+  );
+
+  const triangle = [9, 3, 6, 9].map((num) => `${linePoints[num].x},${linePoints[num].y}`).join(" ");
+  const hexade = [1, 4, 2, 8, 5, 7, 1].map((num) => `${linePoints[num].x},${linePoints[num].y}`).join(" ");
+
+  const nodes = types
+    .map((type) => {
+      const node = pointForType(type.number, center, nodeRadius);
+      const activeClass = interactive && state.selectedType === type.number ? " active" : "";
+      if (!interactive) {
+        return `<circle class="enneagram-dot" cx="${node.x}" cy="${node.y}" r="5"></circle>`;
+      }
+      return `
+        <g class="enneagram-node${activeClass}" data-type="${type.number}" tabindex="${interactive ? "0" : "-1"}" role="${interactive ? "button" : "img"}" aria-label="${type.number}. ${type.name}">
+          <circle cx="${node.x}" cy="${node.y}" r="20"></circle>
+          <text x="${node.x}" y="${node.y + 5}" text-anchor="middle">${type.number}</text>
+        </g>
+      `;
+    })
+    .join("");
+
+  const labels = interactive
+    ? types
+        .map((type) => {
+          const label = pointForType(type.number, center, labelRadius);
+          const width = Math.max(88, Math.min(138, 34 + type.name.length * 5.4));
+          const activeClass = state.selectedType === type.number ? " active" : "";
+          return `
+            <g class="enneagram-label-group${activeClass}" data-type="${type.number}" tabindex="0" role="button" aria-label="${type.number}. ${type.name}">
+              <rect class="enneagram-label-pill" x="${label.x - width / 2}" y="${label.y - 13}" width="${width}" height="26" rx="13"></rect>
+              <text class="enneagram-label" x="${label.x}" y="${label.y + 4}" text-anchor="middle">${escapeHtml(type.name)}</text>
+            </g>
+          `;
+        })
+        .join("")
+    : "";
+
+  container.innerHTML = `
+    <svg class="enneagram-svg" viewBox="0 0 520 520" aria-hidden="${interactive ? "false" : "true"}">
+      <circle class="enneagram-ring" cx="${center}" cy="${center}" r="188"></circle>
+      <polyline class="enneagram-line" points="${triangle}"></polyline>
+      <polyline class="enneagram-line" points="${hexade}"></polyline>
+      ${nodes}
+      ${labels}
+    </svg>
+  `;
+
+  if (interactive) {
+    container.querySelectorAll(".enneagram-node, .enneagram-label-group").forEach((node) => {
+      node.addEventListener("click", () => selectType(Number(node.dataset.type)));
+      node.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectType(Number(node.dataset.type));
+        }
+      });
+    });
+  }
+}
+
+function pointForType(number, center, radius) {
+  const angleByType = {
+    9: -90,
+    1: -50,
+    2: -10,
+    3: 30,
+    4: 70,
+    5: 110,
+    6: 150,
+    7: 190,
+    8: 230
+  };
+  const angle = (angleByType[number] * Math.PI) / 180;
+  return {
+    x: Math.round(center + radius * Math.cos(angle)),
+    y: Math.round(center + radius * Math.sin(angle))
+  };
+}
+
+function selectType(number) {
+  state.selectedType = number;
+  renderEnneagram("types-enneagram", true);
+  renderTypeCard(number);
+}
+
+function renderTypeCard(number) {
+  const type = state.translations[state.lang].types.items.find((item) => item.number === number);
+  const card = document.getElementById("type-card");
+  card.innerHTML = `
+    <div class="emblem">${getEmblemSvg(type.emblem)}</div>
+    <h3>${type.number}. ${escapeHtml(type.name)}</h3>
+    <dl>
+      <div>
+        <dt>${escapeHtml(t("types.wound"))}</dt>
+        <dd>${escapeHtml(type.wound)}</dd>
+      </div>
+      <div>
+        <dt>${escapeHtml(t("types.mechanism"))}</dt>
+        <dd>${escapeHtml(type.mechanism)}</dd>
+      </div>
+      <div>
+        <dt>${escapeHtml(t("types.path"))}</dt>
+        <dd>${escapeHtml(type.path)}</dd>
+      </div>
+    </dl>
+  `;
+}
+
+function getEmblemSvg(name) {
+  const common = 'width="42" height="42" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+  const icons = {
+    balance: `<svg ${common}><path d="M21 7v28"/><path d="M10 14h22"/><path d="M14 14 8 25h12l-6-11Z"/><path d="m28 14-6 11h12l-6-11Z"/><path d="M14 35h14"/></svg>`,
+    heart: `<svg ${common}><path d="M21 34s-13-8-13-18a7 7 0 0 1 13-4 7 7 0 0 1 13 4c0 10-13 18-13 18Z"/></svg>`,
+    arrow: `<svg ${common}><path d="M9 31 31 9"/><path d="M17 9h14v14"/></svg>`,
+    moon: `<svg ${common}><path d="M28 33A14 14 0 1 1 17 8a12 12 0 0 0 11 25Z"/></svg>`,
+    eye: `<svg ${common}><path d="M4 21s6-10 17-10 17 10 17 10-6 10-17 10S4 21 4 21Z"/><circle cx="21" cy="21" r="5"/></svg>`,
+    shield: `<svg ${common}><path d="M21 5 34 10v10c0 9-6 15-13 18C14 35 8 29 8 20V10l13-5Z"/></svg>`,
+    sun: `<svg ${common}><circle cx="21" cy="21" r="7"/><path d="M21 3v6M21 33v6M3 21h6M33 21h6M8 8l4 4M30 30l4 4M34 8l-4 4M12 30l-4 4"/></svg>`,
+    mountain: `<svg ${common}><path d="m4 34 13-23 8 13 4-6 9 16H4Z"/><path d="m17 11 2 8 6 5"/></svg>`,
+    circle: `<svg ${common}><circle cx="21" cy="21" r="14"/><path d="M13 21h16"/></svg>`
+  };
+  return icons[name] ?? icons.circle;
+}
+
+function renderFormations() {
+  const tbody = document.getElementById("formations-body");
+  tbody.innerHTML = state.formations
+    .map((formation, index) => {
+      if (state.isAdmin) {
+        return `
+          <tr>
+            <td><input class="table-input" value="${escapeAttribute(formation.date)}" data-field="date" data-index="${index}"></td>
+            <td><input class="table-input" value="${escapeAttribute(formation.time)}" data-field="time" data-index="${index}"></td>
+            <td><input class="table-input" value="${escapeAttribute(formation.place)}" data-field="place" data-index="${index}"></td>
+            <td><input class="table-input" value="${escapeAttribute(formation.topic)}" data-field="topic" data-index="${index}"></td>
+            <td><button class="danger-button" type="button" data-delete="${index}">${t("formations.delete")}</button></td>
+          </tr>
+        `;
+      }
+      return `
+        <tr>
+          <td>${escapeHtml(formation.date)}</td>
+          <td>${escapeHtml(formation.time)}</td>
+          <td>${escapeHtml(formation.place)}</td>
+          <td>${escapeHtml(formation.topic)}</td>
+          <td><button class="table-button" type="button" data-register="${formation.id}">${t("formations.register")}</button></td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  if (state.isAdmin) {
+    const row = document.createElement("tr");
+    row.className = "admin-row";
+    row.innerHTML = `
+      <td colspan="5">
+        <button class="table-button admin-add-row" type="button" id="add-formation">${t("formations.add")}</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  }
+
+  bindFormationTableActions();
+}
+
+function bindFormationTableActions() {
+  document.querySelectorAll("[data-register]").forEach((button) => {
+    button.addEventListener("click", () => openRegistration(button.dataset.register));
+  });
+
+  document.querySelectorAll(".table-input").forEach((input) => {
+    input.addEventListener("input", () => {
+      const index = Number(input.dataset.index);
+      state.formations[index][input.dataset.field] = input.value;
+    });
+  });
+
+  document.querySelectorAll("[data-delete]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.formations.splice(Number(button.dataset.delete), 1);
+      renderFormations();
+    });
+  });
+
+  const addButton = document.getElementById("add-formation");
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      state.formations.push({
+        id: `formation-${Date.now()}`,
+        date: "Nouvelle date",
+        time: "09h30 - 17h30",
+        place: "Lieu",
+        topic: "Nouveau sujet"
+      });
+      renderFormations();
+    });
+  }
+}
+
+function openRegistration(formationId) {
+  state.selectedFormation = state.formations.find((formation) => formation.id === formationId);
+  if (!state.selectedFormation) return;
+
+  const details = document.getElementById("selected-formation");
+  details.innerHTML = ["date", "time", "place", "topic"]
+    .map((field) => `<div><strong>${escapeHtml(t(`formations.${field}`))}</strong>${escapeHtml(state.selectedFormation[field])}</div>`)
+    .join("");
+
+  document.getElementById("registration-message").textContent = "";
+  document.getElementById("registration-form").reset();
+  document.getElementById("inscription").hidden = false;
+  document.getElementById("inscription").scrollIntoView({ behavior: "smooth" });
+}
+
+function bindRegistration() {
+  document.getElementById("back-to-formations").addEventListener("click", () => {
+    document.getElementById("inscription").hidden = true;
+    document.getElementById("formations").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("registration-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = Object.fromEntries(new FormData(event.currentTarget).entries());
+    const registration = {
+      ...formData,
+      formation: state.selectedFormation,
+      createdAt: new Date().toISOString()
+    };
+    saveRegistration(registration);
+    event.currentTarget.reset();
+    document.getElementById("registration-message").textContent = t("registration.success");
+  });
+}
+
+function saveRegistration(registration) {
+  const storageKey = "enneagramme-inscriptions";
+  const registrations = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  registrations.push(registration);
+  localStorage.setItem(storageKey, JSON.stringify(registrations));
+
+  // Connexion future possible : envoyer registration vers un backend ou Google Sheets ici.
+}
+
+function bindAdmin() {
+  document.getElementById("admin-toggle").addEventListener("click", () => {
+    if (!state.isAdmin) {
+      const password = window.prompt("Mot de passe admin");
+      if (password !== "admin123") {
+        window.alert(t("admin.wrongPassword"));
+        return;
+      }
+    }
+    state.isAdmin = !state.isAdmin;
+    setEditableMode(state.isAdmin);
+    renderFormations();
+  });
+
+  document.getElementById("export-data").addEventListener("click", exportData);
+
+  document.querySelectorAll("[data-editable][data-i18n]").forEach((element) => {
+    element.addEventListener("input", () => {
+      setByPath(state.translations[state.lang], element.dataset.i18n, element.textContent.trim());
+    });
+  });
+}
+
+function setEditableMode(isEditable) {
+  document.body.classList.toggle("is-admin", isEditable);
+  document.querySelectorAll("[data-editable]").forEach((element) => {
+    element.contentEditable = String(isEditable);
+  });
+  document.getElementById("admin-toggle").textContent = isEditable ? t("admin.enabled") : t("admin.button");
+}
+
+function exportData() {
+  const data = {
+    formations: state.formations,
+    translations: state.translations,
+    registrations: JSON.parse(localStorage.getItem("enneagramme-inscriptions") || "[]")
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "donnees-enneagramme.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function prepareTrainerImages() {
+  document.querySelectorAll(".trainer-photo img").forEach((image) => {
+    image.addEventListener("error", () => image.classList.add("is-hidden"));
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value).replaceAll("`", "&#096;");
+}

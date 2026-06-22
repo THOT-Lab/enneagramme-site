@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Formations Ennéagramme - Le chemin vers l'éveil."
+    />
+    <link rel="canonical" href="https://thot-lab.github.io/enneagramme-site/" />
+    <meta property="og:title" content="Ennéagramme - Le chemin vers l'éveil" />
+    <meta
+      property="og:description"
+      content="Une offre de formation claire et profonde autour de l'Ennéagramme."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ennéagramme" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://thot-lab.github.io/enneagramme-site/" />
+    <meta property="og:image" content="https://thot-lab.github.io/enneagramme-site/assets/images/og-image.png" />
+    <meta property="og:image:secure_url" content="https://thot-lab.github.io/enneagramme-site/assets/images/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ennéagramme - Le chemin vers l'éveil, formations et transformation intérieure." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ennéagramme - Le chemin vers l'éveil" />
+    <meta
+      name="twitter:description"
+      content="Une offre de formation claire et profonde autour de l'Ennéagramme."
+    />
+    <meta name="twitter:image" content="https://thot-lab.github.io/enneagramme-site/assets/images/og-image.png" />
+    <meta name="twitter:image:alt" content="Ennéagramme - Le chemin vers l'éveil" />
+    <meta name="theme-color" content="#00795d" />
+    <title>Ennéagramme - Le chemin vers l'éveil</title>
+    <link rel="icon" href="assets/images/favicon.ico" sizes="any" />
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/images/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="assets/images/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#accueil" aria-label="Retour à l'accueil">
+        <span class="brand-mark">
+          <img src="assets/images/logo.svg" alt="" />
+        </span>
+        <span>
+          <strong data-i18n="site.title">Ennéagramme</strong>
+          <small data-i18n="site.subtitle">Le chemin vers l'éveil</small>
+        </span>
+      </a>
+
+      <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+        <a href="#accueil" data-i18n="nav.home">Accueil</a>
+        <a href="#formations" data-i18n="nav.formations">Formations</a>
+        <a href="#enneatypes" data-i18n="nav.types">Aborder les Ennéatypes</a>
+        <a href="#formateurs" data-i18n="nav.trainers">Les formateurs</a>
+      </nav>
+
+      <div class="language-switcher" aria-label="Choix de langue">
+        <button type="button" data-lang="fr" class="active">FR</button>
+        <button type="button" data-lang="es">ESP</button>
+        <button type="button" data-lang="en">ENG</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="accueil" class="hero section">
+        <div id="home-enneagram" class="hero-symbol" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-i18n="hero.eyebrow" data-editable>Formation et connaissance de soi</p>
+          <h1>
+            <span data-i18n="hero.title" data-editable>Ennéagramme</span>
+            <em data-i18n="hero.subtitle" data-editable>Le chemin vers l'éveil</em>
+          </h1>
+          <p class="hero-text" data-i18n="hero.text" data-editable>
+            L'Ennéagramme est une carte de compréhension de soi et des autres. Il décrit neuf grandes
+            dynamiques intérieures, chacune reliée à une manière de percevoir le monde, de se protéger,
+            d'aimer, de décider et d'évoluer. Utilisé avec justesse, il devient un outil d'éveil, de
+            lucidité et de transformation personnelle.
+          </p>
+          <a class="primary-button" href="#formations" data-i18n="hero.cta">Formations</a>
+        </div>
+      </section>
+
+      <section id="formations" class="section section-soft">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="formations.eyebrow" data-editable>Parcours et ateliers</p>
+          <h2 data-i18n="formations.title" data-editable>Formations</h2>
+          <p data-i18n="formations.intro" data-editable>
+            Des journées pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle,
+            relationnelle et professionnelle.
+          </p>
+        </div>
+
+        <div class="table-shell">
+          <table class="formations-table">
+            <thead>
+              <tr>
+                <th data-i18n="formations.date">Date</th>
+                <th data-i18n="formations.time">Horaire</th>
+                <th data-i18n="formations.place">Lieu</th>
+                <th data-i18n="formations.topic">Sujet</th>
+                <th data-i18n="formations.action">Action</th>
+              </tr>
+            </thead>
+            <tbody id="formations-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="inscription" class="section registration-section" hidden>
+        <div class="registration-panel">
+          <button class="ghost-button" type="button" id="back-to-formations" data-i18n="registration.back">
+            Retour aux formations
+          </button>
+          <div class="section-heading left">
+            <p class="eyebrow" data-i18n="registration.eyebrow">Inscription</p>
+            <h2 data-i18n="registration.title">Demande d'inscription</h2>
+          </div>
+
+          <div id="selected-formation" class="selected-formation"></div>
+
+          <form id="registration-form" class="registration-form">
+            <label>
+              <span data-i18n="registration.firstName">Prénom</span>
+              <input type="text" name="firstName" required autocomplete="given-name" />
+            </label>
+            <label>
+              <span data-i18n="registration.lastName">Nom</span>
+              <input type="text" name="lastName" required autocomplete="family-name" />
+            </label>
+            <label>
+              <span data-i18n="registration.phone">Téléphone</span>
+              <input type="tel" name="phone" required autocomplete="tel" />
+            </label>
+            <label>
+              <span data-i18n="registration.email">Email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <button class="primary-button" type="submit" data-i18n="registration.submit">Valider</button>
+          </form>
+          <p id="registration-message" class="form-message" role="status"></p>
+        </div>
+      </section>
+
+      <section id="enneatypes" class="section">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="types.eyebrow" data-editable>Neuf chemins de conscience</p>
+          <h2 data-i18n="types.title" data-editable>Aborder les Ennéatypes</h2>
+          <p data-i18n="types.intro" data-editable>
+            Les ennéatypes désignent neuf structures fondamentales de personnalité. Ils ne doivent pas
+            être compris comme des étiquettes fixes, mais comme des dynamiques intérieures : des manières
+            de chercher la sécurité, la reconnaissance, l'amour ou le contrôle. Dans notre approche,
+            chaque ennéatype est abordé à partir de sa blessure profonde, c'est-à-dire le point sensible
+            autour duquel se sont construits ses réflexes, ses défenses et son chemin possible d'éveil.
+          </p>
+        </div>
+
+        <div class="types-layout">
+          <div id="types-enneagram" class="enneagram-holder interactive" aria-label="Ennéatypes cliquables"></div>
+          <article id="type-card" class="type-card" aria-live="polite"></article>
+        </div>
+      </section>
+
+      <section id="formateurs" class="section section-soft">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="trainers.eyebrow" data-editable>Transmission</p>
+          <h2 data-i18n="trainers.title" data-editable>Les formateurs</h2>
+          <p data-i18n="trainers.intro" data-editable>
+            Une approche pédagogique claire, enracinée dans l'expérience humaine et attentive au rythme de chacun.
+          </p>
+        </div>
+
+        <div class="trainer-grid">
+          <article class="trainer-card">
+            <div class="trainer-photo">
+              <img src="assets/images/yves-kovacs.jpg" alt="Portrait de Yves Kovacs" />
+              <span>YK</span>
+            </div>
+            <div>
+              <h3 data-i18n="trainers.yves.name" data-editable>Yves Kovacs</h3>
+              <p data-i18n="trainers.yves.bio" data-editable>
+                Yves Kovacs accompagne depuis plusieurs années des personnes et des groupes dans la
+                découverte de l'Ennéagramme comme outil de connaissance de soi, de transformation
+                intérieure et de clarification relationnelle. Son approche articule précision pédagogique,
+                profondeur humaine et attention aux blessures fondamentales propres à chaque ennéatype.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="temoignages" class="section testimonials">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="testimonials.eyebrow" data-editable>Expériences</p>
+          <h2 data-i18n="testimonials.title" data-editable>Témoignages</h2>
+        </div>
+
+        <div class="testimonial-grid">
+          <article class="testimonial-card">
+            <div class="video-slot">Video</div>
+            <p data-i18n="testimonials.items.0" data-editable>Une formation claire, profonde et directement utile.</p>
+          </article>
+          <article class="testimonial-card">
+            <div class="video-slot">Video</div>
+            <p data-i18n="testimonials.items.1" data-editable>Une approche sensible, structurée et transformante.</p>
+          </article>
+          <article class="testimonial-card">
+            <div class="video-slot">Video</div>
+            <p data-i18n="testimonials.items.2" data-editable>
+              J'ai découvert une nouvelle manière de comprendre mes mécanismes intérieurs.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span data-i18n="footer.text" data-editable>Ennéagramme - Le chemin vers l'éveil</span>
+      </p>
+      <div class="footer-actions">
+        <button type="button" class="text-button" id="admin-toggle" data-i18n="admin.button">Mode édition</button>
+        <button type="button" class="text-button admin-only" id="export-data" data-i18n="admin.export">
+          Exporter les données
+        </button>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
