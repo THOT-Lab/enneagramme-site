@@ -1,6 +1,6 @@
 {
   "fr": {
-    "site": { "title": "Ennéagramme", "subtitle": "Le chemin vers l'éveil" },
+    "site": { "title": "Ennéagramme", "subtitle": "Un chemin vers l'éveil" },
     "nav": {
       "home": "Accueil",
       "formations": "Formations",
@@ -10,7 +10,7 @@
     "hero": {
       "eyebrow": "Formation et connaissance de soi",
       "title": "Ennéagramme",
-      "subtitle": "Le chemin vers l'éveil",
+      "subtitle": "Un chemin vers l'éveil",
       "text": "L'Ennéagramme est une carte de compréhension de soi et des autres. Il décrit neuf grandes dynamiques intérieures, chacune reliée à une manière de percevoir le monde, de se protéger, d'aimer, de décider et d'évoluer. Utilisé avec justesse, il devient un outil d'éveil, de lucidité et de transformation personnelle.",
       "cta": "Formations"
     },
@@ -76,7 +76,7 @@
         "J'ai découvert une nouvelle manière de comprendre mes mécanismes intérieurs."
       ]
     },
-    "footer": { "text": "Ennéagramme - Le chemin vers l'éveil" },
+    "footer": { "text": "Ennéagramme - Un chemin vers l'éveil" },
     "admin": {
       "button": "Mode édition",
       "enabled": "Mode édition actif",

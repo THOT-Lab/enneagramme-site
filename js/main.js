@@ -11,7 +11,7 @@
 
 const DEFAULT_TRANSLATIONS = {
   fr: {
-    site: { title: "Ennéagramme", subtitle: "Le chemin vers l'éveil" },
+    site: { title: "Ennéagramme", subtitle: "Un chemin vers l'éveil" },
     nav: {
       home: "Accueil",
       formations: "Formations",
@@ -21,7 +21,7 @@ const DEFAULT_TRANSLATIONS = {
     hero: {
       eyebrow: "Formation et connaissance de soi",
       title: "Ennéagramme",
-      subtitle: "Le chemin vers l'éveil",
+      subtitle: "Un chemin vers l'éveil",
       text: "L'Ennéagramme est une carte de compréhension de soi et des autres. Il décrit neuf grandes dynamiques intérieures, chacune reliée à une manière de percevoir le monde, de se protéger, d'aimer, de décider et d'évoluer. Utilisé avec justesse, il devient un outil d'éveil, de lucidité et de transformation personnelle.",
       cta: "Formations"
     },
@@ -87,7 +87,7 @@ const DEFAULT_TRANSLATIONS = {
         "J'ai découvert une nouvelle manière de comprendre mes mécanismes intérieurs."
       ]
     },
-    footer: { text: "Ennéagramme - Le chemin vers l'éveil" },
+    footer: { text: "Ennéagramme - Un chemin vers l'éveil" },
     admin: {
       button: "Mode édition",
       enabled: "Mode édition actif",
@@ -249,7 +249,6 @@ const DEFAULT_TRANSLATIONS = {
 
 const state = {
   lang: "fr",
-  isAdmin: false,
   selectedType: 1,
   translations: {}
 };
@@ -261,7 +260,6 @@ async function init() {
 
   bindNavigation();
   bindLanguageSwitcher();
-  bindAdmin();
   prepareTrainerImages();
   renderAll();
 }
@@ -281,7 +279,6 @@ function renderAll() {
   renderEnneagram("home-enneagram", false);
   renderEnneagram("types-enneagram", true);
   renderTypeCard(state.selectedType);
-  setEditableMode(state.isAdmin);
 }
 
 function t(path) {
@@ -290,16 +287,6 @@ function t(path) {
 
 function getByPath(source, path) {
   return path.split(".").reduce((value, key) => (value == null ? undefined : value[key]), source);
-}
-
-function setByPath(source, path, nextValue) {
-  const keys = path.split(".");
-  const last = keys.pop();
-  const target = keys.reduce((value, key) => {
-    if (value[key] == null) value[key] = {};
-    return value[key];
-  }, source);
-  target[last] = nextValue;
 }
 
 function applyTranslations() {
@@ -473,51 +460,6 @@ function getEmblemSvg(name) {
   return icons[name] ?? icons.circle;
 }
 
-function bindAdmin() {
-  document.getElementById("admin-toggle").addEventListener("click", () => {
-    if (!state.isAdmin) {
-      const password = window.prompt("Mot de passe admin");
-      if (password !== "admin123") {
-        window.alert(t("admin.wrongPassword"));
-        return;
-      }
-    }
-    state.isAdmin = !state.isAdmin;
-    setEditableMode(state.isAdmin);
-  });
-
-  document.getElementById("export-data").addEventListener("click", exportData);
-
-  document.querySelectorAll("[data-editable][data-i18n]").forEach((element) => {
-    element.addEventListener("input", () => {
-      setByPath(state.translations[state.lang], element.dataset.i18n, element.textContent.trim());
-    });
-  });
-}
-
-function setEditableMode(isEditable) {
-  document.body.classList.toggle("is-admin", isEditable);
-  document.querySelectorAll("[data-editable]").forEach((element) => {
-    element.contentEditable = String(isEditable);
-  });
-  document.getElementById("admin-toggle").textContent = isEditable ? t("admin.enabled") : t("admin.button");
-}
-
-function exportData() {
-  const data = {
-    translations: state.translations,
-    registrations: JSON.parse(localStorage.getItem("enneagramme-inscriptions") || "[]"),
-    organizationRequests: JSON.parse(localStorage.getItem("enneagramme-demandes-organisation") || "[]")
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "donnees-enneagramme.json";
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
 function prepareTrainerImages() {
   document.querySelectorAll(".trainer-photo img").forEach((image) => {
     image.addEventListener("error", () => image.classList.add("is-hidden"));
@@ -531,8 +473,4 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function escapeAttribute(value) {
-  return escapeHtml(value).replaceAll("`", "&#096;");
 }

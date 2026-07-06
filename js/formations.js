@@ -23,8 +23,8 @@ const DEFAULT_FORMATIONS = [
 
 const I18N = {
   fr: {
-    site: { title: "Ennéagramme", subtitle: "Le chemin vers l'éveil" },
-    footer: { text: "Ennéagramme - Le chemin vers l'éveil" },
+    site: { title: "Ennéagramme", subtitle: "Un chemin vers l'éveil" },
+    footer: { text: "Ennéagramme - Un chemin vers l'éveil" },
     page: {
       back: "Revenir à la page d'accueil",
       eyebrow: "Prochaines sessions",
@@ -39,6 +39,14 @@ const I18N = {
       button: "Demander l'organisation d'une formation"
     },
     modal: { cancel: "Annuler" },
+    admin: {
+      button: "Admin",
+      enabled: "Quitter le mode admin",
+      export: "Exporter les formations",
+      prompt: "Mot de passe administrateur",
+      wrongPassword: "Mot de passe incorrect.",
+      hint: "Mode admin : cliquez sur un champ d'un encadré pour le modifier, puis exportez les formations."
+    },
     registration: {
       eyebrow: "Inscription",
       title: "Demande d'inscription",
@@ -83,6 +91,14 @@ const I18N = {
       button: "Solicitar la organización de una formación"
     },
     modal: { cancel: "Cancelar" },
+    admin: {
+      button: "Admin",
+      enabled: "Salir del modo admin",
+      export: "Exportar las formaciones",
+      prompt: "Contraseña de administrador",
+      wrongPassword: "Contraseña incorrecta.",
+      hint: "Modo admin: haga clic en un campo de una tarjeta para modificarlo y luego exporte las formaciones."
+    },
     registration: {
       eyebrow: "Inscripción",
       title: "Solicitud de inscripción",
@@ -127,6 +143,14 @@ const I18N = {
       button: "Request a custom training"
     },
     modal: { cancel: "Cancel" },
+    admin: {
+      button: "Admin",
+      enabled: "Exit admin mode",
+      export: "Export trainings",
+      prompt: "Administrator password",
+      wrongPassword: "Incorrect password.",
+      hint: "Admin mode: click a field on a card to edit it, then export the trainings."
+    },
     registration: {
       eyebrow: "Registration",
       title: "Registration request",
@@ -156,10 +180,13 @@ const I18N = {
   }
 };
 
+const ADMIN_PASSWORD = "Ennea2026";
+
 const state = {
   lang: "fr",
   formations: [],
-  selectedFormation: null
+  selectedFormation: null,
+  isAdmin: false
 };
 
 document.addEventListener("DOMContentLoaded", init);
@@ -168,6 +195,7 @@ async function init() {
   state.formations = await loadJson("data/formations.json", DEFAULT_FORMATIONS);
   bindLanguageSwitcher();
   bindDialogs();
+  bindAdmin();
   render();
 }
 
@@ -192,6 +220,7 @@ function getByPath(source, path) {
 function render() {
   applyTranslations();
   renderCards();
+  applyAdminState();
 }
 
 function applyTranslations() {
@@ -214,24 +243,58 @@ function bindLanguageSwitcher() {
   });
 }
 
+function bindAdmin() {
+  document.getElementById("admin-toggle").addEventListener("click", () => {
+    if (!state.isAdmin) {
+      const password = window.prompt(t("admin.prompt"));
+      if (password === null) return;
+      if (password !== ADMIN_PASSWORD) {
+        window.alert(t("admin.wrongPassword"));
+        return;
+      }
+    }
+    state.isAdmin = !state.isAdmin;
+    render();
+  });
+
+  document.getElementById("admin-export").addEventListener("click", exportFormations);
+}
+
+function applyAdminState() {
+  document.body.classList.toggle("is-admin", state.isAdmin);
+  const toggle = document.getElementById("admin-toggle");
+  if (toggle) toggle.textContent = state.isAdmin ? t("admin.enabled") : t("admin.button");
+}
+
+function exportFormations() {
+  const blob = new Blob([JSON.stringify(state.formations, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "formations.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 function renderCards() {
   const grid = document.getElementById("formations-grid");
+  const edit = state.isAdmin ? ' contenteditable="true"' : "";
   const cards = state.formations
     .map(
       (formation) => `
       <article class="formation-card">
         <div class="formation-card-body">
-          <span class="formation-place">${escapeHtml(formation.place)}</span>
-          <h2 class="formation-title">${escapeHtml(formation.title)}</h2>
-          <p class="formation-desc">${escapeHtml(formation.description)}</p>
+          <span class="formation-place"${edit} data-field="place" data-id="${escapeHtml(formation.id)}">${escapeHtml(formation.place)}</span>
+          <h2 class="formation-title"${edit} data-field="title" data-id="${escapeHtml(formation.id)}">${escapeHtml(formation.title)}</h2>
+          <p class="formation-desc"${edit} data-field="description" data-id="${escapeHtml(formation.id)}">${escapeHtml(formation.description)}</p>
           <dl class="formation-meta">
             <div>
               <dt>${escapeHtml(t("card.date"))}</dt>
-              <dd>${escapeHtml(formation.date)}</dd>
+              <dd${edit} data-field="date" data-id="${escapeHtml(formation.id)}">${escapeHtml(formation.date)}</dd>
             </div>
             <div>
               <dt>${escapeHtml(t("card.time"))}</dt>
-              <dd>${escapeHtml(formation.time)}</dd>
+              <dd${edit} data-field="time" data-id="${escapeHtml(formation.id)}">${escapeHtml(formation.time)}</dd>
             </div>
           </dl>
         </div>
@@ -260,6 +323,15 @@ function renderCards() {
     button.addEventListener("click", () => openRegistration(button.dataset.register));
   });
   document.getElementById("open-organize").addEventListener("click", openOrganize);
+
+  if (state.isAdmin) {
+    grid.querySelectorAll("[data-field][data-id]").forEach((element) => {
+      element.addEventListener("input", () => {
+        const formation = state.formations.find((item) => item.id === element.dataset.id);
+        if (formation) formation[element.dataset.field] = element.textContent.trim();
+      });
+    });
+  }
 }
 
 function openRegistration(formationId) {

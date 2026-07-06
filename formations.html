@@ -19,7 +19,7 @@
         </span>
         <span>
           <strong data-i18n="site.title">Ennéagramme</strong>
-          <small data-i18n="site.subtitle">Le chemin vers l'éveil</small>
+          <small data-i18n="site.subtitle">Un chemin vers l'éveil</small>
         </span>
       </a>
 
@@ -46,15 +46,24 @@
           </p>
         </div>
 
+        <p class="admin-hint admin-only" data-i18n="admin.hint">
+          Mode admin : cliquez sur un champ d'un encadré pour le modifier, puis exportez les formations.
+        </p>
+
         <div id="formations-grid" class="formations-grid"></div>
       </section>
     </main>
 
     <footer class="site-footer">
       <p>
-        <span data-i18n="footer.text">Ennéagramme - Le chemin vers l'éveil</span>
+        <span data-i18n="footer.text">Ennéagramme - Un chemin vers l'éveil</span>
       </p>
-      <a class="text-button" href="index.html#accueil" data-i18n="page.back">Revenir à la page d'accueil</a>
+      <div class="footer-actions">
+        <button type="button" class="text-button admin-only" id="admin-export" data-i18n="admin.export">
+          Exporter les formations
+        </button>
+        <button type="button" class="text-button" id="admin-toggle" data-i18n="admin.button">Admin</button>
+      </div>
     </footer>
 
     <!-- Modale : inscription à une formation -->
