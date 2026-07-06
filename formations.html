@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Découvrez nos formations et stages Ennéagramme : dates, lieux et inscription." />
+    <title>Nos formations - Ennéagramme</title>
+    <link rel="icon" href="assets/images/favicon.ico" sizes="any" />
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html#accueil" aria-label="Retour à l'accueil">
+        <span class="brand-mark">
+          <img src="assets/images/logo.svg" alt="" />
+        </span>
+        <span>
+          <strong data-i18n="site.title">Ennéagramme</strong>
+          <small data-i18n="site.subtitle">Le chemin vers l'éveil</small>
+        </span>
+      </a>
+
+      <a class="back-home" href="index.html#accueil" data-i18n="page.back">
+        <span aria-hidden="true">&larr;</span>
+        <span>Revenir à la page d'accueil</span>
+      </a>
+
+      <div class="language-switcher" aria-label="Choix de langue">
+        <button type="button" data-lang="fr" class="active">FR</button>
+        <button type="button" data-lang="es">ESP</button>
+        <button type="button" data-lang="en">ENG</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="page.eyebrow">Prochaines sessions</p>
+          <h1 class="page-title" data-i18n="page.title">Nos formations</h1>
+          <p data-i18n="page.intro">
+            Choisissez la formation qui vous appelle et inscrivez-vous en quelques instants. Vous pouvez
+            aussi demander l'organisation d'une formation près de chez vous.
+          </p>
+        </div>
+
+        <div id="formations-grid" class="formations-grid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span data-i18n="footer.text">Ennéagramme - Le chemin vers l'éveil</span>
+      </p>
+      <a class="text-button" href="index.html#accueil" data-i18n="page.back">Revenir à la page d'accueil</a>
+    </footer>
+
+    <!-- Modale : inscription à une formation -->
+    <dialog id="inscription-dialog" class="modal">
+      <form method="dialog" class="modal-panel" id="registration-form">
+        <button type="button" class="modal-close" data-close aria-label="Fermer">&times;</button>
+        <p class="eyebrow" data-i18n="registration.eyebrow">Inscription</p>
+        <h2 data-i18n="registration.title">Demande d'inscription</h2>
+
+        <div id="selected-formation" class="selected-formation modal-summary"></div>
+
+        <div class="modal-fields">
+          <label>
+            <span data-i18n="registration.firstName">Prénom</span>
+            <input type="text" name="firstName" required autocomplete="given-name" />
+          </label>
+          <label>
+            <span data-i18n="registration.lastName">Nom</span>
+            <input type="text" name="lastName" required autocomplete="family-name" />
+          </label>
+          <label>
+            <span data-i18n="registration.phone">Téléphone</span>
+            <input type="tel" name="phone" required autocomplete="tel" />
+          </label>
+          <label>
+            <span data-i18n="registration.email">Email</span>
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <label class="field-full">
+            <span data-i18n="registration.message">Message (facultatif)</span>
+            <textarea name="message" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="ghost-button" data-close data-i18n="modal.cancel">Annuler</button>
+          <button type="submit" class="primary-button" data-i18n="registration.submit">Valider mon inscription</button>
+        </div>
+        <p id="registration-message" class="form-message" role="status"></p>
+      </form>
+    </dialog>
+
+    <!-- Modale : organiser une formation chez vous -->
+    <dialog id="organize-dialog" class="modal">
+      <form method="dialog" class="modal-panel" id="organize-form">
+        <button type="button" class="modal-close" data-close aria-label="Fermer">&times;</button>
+        <p class="eyebrow" data-i18n="organize.eyebrow">Sur mesure</p>
+        <h2 data-i18n="organize.title">Organiser une formation chez vous</h2>
+        <p class="modal-lead" data-i18n="organize.intro">
+          Association, entreprise, groupe ou collectivité : nous construisons une formation adaptée à
+          votre contexte, dans le lieu de votre choix. Décrivez votre projet, nous vous recontactons.
+        </p>
+
+        <div class="modal-fields">
+          <label>
+            <span data-i18n="organize.contact">Nom du contact</span>
+            <input type="text" name="contact" required autocomplete="name" />
+          </label>
+          <label>
+            <span data-i18n="organize.structure">Structure / organisation</span>
+            <input type="text" name="structure" autocomplete="organization" />
+          </label>
+          <label>
+            <span data-i18n="organize.email">Email</span>
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <label>
+            <span data-i18n="organize.phone">Téléphone</span>
+            <input type="tel" name="phone" autocomplete="tel" />
+          </label>
+          <label>
+            <span data-i18n="organize.city">Ville / lieu souhaité</span>
+            <input type="text" name="city" />
+          </label>
+          <label>
+            <span data-i18n="organize.participants">Nombre de participants estimé</span>
+            <input type="number" name="participants" min="1" />
+          </label>
+          <label class="field-full">
+            <span data-i18n="organize.dates">Dates ou période envisagée</span>
+            <input type="text" name="dates" />
+          </label>
+          <label class="field-full">
+            <span data-i18n="organize.message">Votre projet</span>
+            <textarea name="message" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="ghost-button" data-close data-i18n="modal.cancel">Annuler</button>
+          <button type="submit" class="primary-button" data-i18n="organize.submit">Envoyer ma demande</button>
+        </div>
+        <p id="organize-message" class="form-message" role="status"></p>
+      </form>
+    </dialog>
+
+    <script src="js/formations.js"></script>
+  </body>
+</html>

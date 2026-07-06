@@ -1,23 +1,58 @@
 [
   {
     "id": "formation-1",
-    "date": "15 juin 2026",
-    "time": "09h30 - 17h30",
+    "title": "Découvrir les 9 ennéatypes",
     "place": "Paris",
-    "topic": "Découvrir les 9 ennéatypes"
+    "description": "Une première journée d'initiation pour comprendre la carte de l'Ennéagramme, repérer les neuf grandes dynamiques intérieures et commencer à identifier son propre fonctionnement.",
+    "date": "15 juin 2026",
+    "time": "09h30 - 17h30"
   },
   {
     "id": "formation-2",
-    "date": "28 juin 2026",
-    "time": "09h30 - 17h30",
+    "title": "Blessures profondes et mécanismes de défense",
     "place": "Lyon",
-    "topic": "Blessures profondes et mécanismes de défense"
+    "description": "Une journée d'approfondissement pour explorer la blessure fondamentale de chaque ennéatype et comprendre les réflexes de protection qui en découlent.",
+    "date": "28 juin 2026",
+    "time": "09h30 - 17h30"
   },
   {
     "id": "formation-3",
-    "date": "12 juillet 2026",
-    "time": "09h30 - 17h30",
+    "title": "Ennéagramme et relations humaines",
     "place": "En ligne",
-    "topic": "Ennéagramme et relations humaines"
+    "description": "Comment les ennéatypes s'attirent, se heurtent et se complètent. Une journée pour éclairer ses relations personnelles et professionnelles avec justesse.",
+    "date": "12 juillet 2026",
+    "time": "09h30 - 17h30"
+  },
+  {
+    "id": "formation-4",
+    "title": "Les ailes et les instincts",
+    "place": "Bordeaux",
+    "description": "Au-delà des neuf types, découvrez les ailes et les sous-types instinctifs qui nuancent et enrichissent la lecture de la personnalité.",
+    "date": "20 septembre 2026",
+    "time": "09h30 - 17h30"
+  },
+  {
+    "id": "formation-5",
+    "title": "Stage résidentiel : le chemin d'éveil",
+    "place": "Abbaye de Sénanque (Provence)",
+    "description": "Trois jours en immersion pour vivre l'Ennéagramme dans le corps et le silence, entre travail intérieur, partages en groupe et temps de méditation.",
+    "date": "9 - 11 octobre 2026",
+    "time": "Résidentiel - 3 jours"
+  },
+  {
+    "id": "formation-6",
+    "title": "Ennéagramme et management",
+    "place": "En ligne",
+    "description": "Une journée dédiée aux managers et responsables d'équipe pour comprendre les motivations profondes de chacun et fluidifier la coopération.",
+    "date": "14 novembre 2026",
+    "time": "09h30 - 17h30"
+  },
+  {
+    "id": "formation-7",
+    "title": "Approfondissement : intégration et désintégration",
+    "place": "Paris",
+    "description": "Une journée avancée sur les mouvements de croissance et de stress de chaque type, pour reconnaître ses dynamiques et soutenir son évolution.",
+    "date": "5 décembre 2026",
+    "time": "09h30 - 17h30"
   }
 ]

@@ -9,30 +9,6 @@
     saveRegistration() en bas de fichier.
 */
 
-const DEFAULT_FORMATIONS = [
-  {
-    id: "formation-1",
-    date: "15 juin 2026",
-    time: "09h30 - 17h30",
-    place: "Paris",
-    topic: "Découvrir les 9 ennéatypes"
-  },
-  {
-    id: "formation-2",
-    date: "28 juin 2026",
-    time: "09h30 - 17h30",
-    place: "Lyon",
-    topic: "Blessures profondes et mécanismes de défense"
-  },
-  {
-    id: "formation-3",
-    date: "12 juillet 2026",
-    time: "09h30 - 17h30",
-    place: "En ligne",
-    topic: "Ennéagramme et relations humaines"
-  }
-];
-
 const DEFAULT_TRANSLATIONS = {
   fr: {
     site: { title: "Ennéagramme", subtitle: "Le chemin vers l'éveil" },
@@ -52,7 +28,8 @@ const DEFAULT_TRANSLATIONS = {
     formations: {
       eyebrow: "Parcours et ateliers",
       title: "Formations",
-      intro: "Des journées pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle, relationnelle et professionnelle.",
+      intro: "Des journées et des stages pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle, relationnelle et professionnelle. Chaque rendez-vous mêle apports clairs, expériences vécues et temps d'intégration, dans un cadre bienveillant et respectueux du rythme de chacun.",
+      discover: "Découvrir nos formations",
       date: "Date",
       time: "Horaire",
       place: "Lieu",
@@ -131,7 +108,8 @@ const DEFAULT_TRANSLATIONS = {
     formations: {
       eyebrow: "Recorridos y talleres",
       title: "Formaciones",
-      intro: "Jornadas para descubrir, profundizar e integrar el Eneagrama en la vida personal, relacional y profesional.",
+      intro: "Jornadas y estancias para descubrir, profundizar e integrar el Eneagrama en la vida personal, relacional y profesional. Cada encuentro combina aportes claros, experiencias vividas y tiempos de integración, en un marco cálido y respetuoso del ritmo de cada persona.",
+      discover: "Descubrir nuestras formaciones",
       date: "Fecha",
       time: "Horario",
       place: "Lugar",
@@ -205,7 +183,8 @@ const DEFAULT_TRANSLATIONS = {
     formations: {
       eyebrow: "Programs and workshops",
       title: "Trainings",
-      intro: "One-day sessions to discover, deepen and integrate the Enneagram into personal, relational and professional life.",
+      intro: "Day sessions and retreats to discover, deepen and integrate the Enneagram into personal, relational and professional life. Each gathering blends clear teaching, lived experience and time for integration, in a caring space that respects everyone's pace.",
+      discover: "Discover our trainings",
       date: "Date",
       time: "Time",
       place: "Place",
@@ -272,21 +251,17 @@ const state = {
   lang: "fr",
   isAdmin: false,
   selectedType: 1,
-  selectedFormation: null,
-  formations: [],
   translations: {}
 };
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
-  state.formations = await loadJson("data/formations.json", DEFAULT_FORMATIONS);
   state.translations = await loadJson("data/translations.json", DEFAULT_TRANSLATIONS);
 
   bindNavigation();
   bindLanguageSwitcher();
   bindAdmin();
-  bindRegistration();
   prepareTrainerImages();
   renderAll();
 }
@@ -303,7 +278,6 @@ async function loadJson(url, fallback) {
 
 function renderAll() {
   applyTranslations();
-  renderFormations();
   renderEnneagram("home-enneagram", false);
   renderEnneagram("types-enneagram", true);
   renderTypeCard(state.selectedType);
@@ -499,125 +473,6 @@ function getEmblemSvg(name) {
   return icons[name] ?? icons.circle;
 }
 
-function renderFormations() {
-  const tbody = document.getElementById("formations-body");
-  tbody.innerHTML = state.formations
-    .map((formation, index) => {
-      if (state.isAdmin) {
-        return `
-          <tr>
-            <td><input class="table-input" value="${escapeAttribute(formation.date)}" data-field="date" data-index="${index}"></td>
-            <td><input class="table-input" value="${escapeAttribute(formation.time)}" data-field="time" data-index="${index}"></td>
-            <td><input class="table-input" value="${escapeAttribute(formation.place)}" data-field="place" data-index="${index}"></td>
-            <td><input class="table-input" value="${escapeAttribute(formation.topic)}" data-field="topic" data-index="${index}"></td>
-            <td><button class="danger-button" type="button" data-delete="${index}">${t("formations.delete")}</button></td>
-          </tr>
-        `;
-      }
-      return `
-        <tr>
-          <td>${escapeHtml(formation.date)}</td>
-          <td>${escapeHtml(formation.time)}</td>
-          <td>${escapeHtml(formation.place)}</td>
-          <td>${escapeHtml(formation.topic)}</td>
-          <td><button class="table-button" type="button" data-register="${formation.id}">${t("formations.register")}</button></td>
-        </tr>
-      `;
-    })
-    .join("");
-
-  if (state.isAdmin) {
-    const row = document.createElement("tr");
-    row.className = "admin-row";
-    row.innerHTML = `
-      <td colspan="5">
-        <button class="table-button admin-add-row" type="button" id="add-formation">${t("formations.add")}</button>
-      </td>
-    `;
-    tbody.appendChild(row);
-  }
-
-  bindFormationTableActions();
-}
-
-function bindFormationTableActions() {
-  document.querySelectorAll("[data-register]").forEach((button) => {
-    button.addEventListener("click", () => openRegistration(button.dataset.register));
-  });
-
-  document.querySelectorAll(".table-input").forEach((input) => {
-    input.addEventListener("input", () => {
-      const index = Number(input.dataset.index);
-      state.formations[index][input.dataset.field] = input.value;
-    });
-  });
-
-  document.querySelectorAll("[data-delete]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.formations.splice(Number(button.dataset.delete), 1);
-      renderFormations();
-    });
-  });
-
-  const addButton = document.getElementById("add-formation");
-  if (addButton) {
-    addButton.addEventListener("click", () => {
-      state.formations.push({
-        id: `formation-${Date.now()}`,
-        date: "Nouvelle date",
-        time: "09h30 - 17h30",
-        place: "Lieu",
-        topic: "Nouveau sujet"
-      });
-      renderFormations();
-    });
-  }
-}
-
-function openRegistration(formationId) {
-  state.selectedFormation = state.formations.find((formation) => formation.id === formationId);
-  if (!state.selectedFormation) return;
-
-  const details = document.getElementById("selected-formation");
-  details.innerHTML = ["date", "time", "place", "topic"]
-    .map((field) => `<div><strong>${escapeHtml(t(`formations.${field}`))}</strong>${escapeHtml(state.selectedFormation[field])}</div>`)
-    .join("");
-
-  document.getElementById("registration-message").textContent = "";
-  document.getElementById("registration-form").reset();
-  document.getElementById("inscription").hidden = false;
-  document.getElementById("inscription").scrollIntoView({ behavior: "smooth" });
-}
-
-function bindRegistration() {
-  document.getElementById("back-to-formations").addEventListener("click", () => {
-    document.getElementById("inscription").hidden = true;
-    document.getElementById("formations").scrollIntoView({ behavior: "smooth" });
-  });
-
-  document.getElementById("registration-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = Object.fromEntries(new FormData(event.currentTarget).entries());
-    const registration = {
-      ...formData,
-      formation: state.selectedFormation,
-      createdAt: new Date().toISOString()
-    };
-    saveRegistration(registration);
-    event.currentTarget.reset();
-    document.getElementById("registration-message").textContent = t("registration.success");
-  });
-}
-
-function saveRegistration(registration) {
-  const storageKey = "enneagramme-inscriptions";
-  const registrations = JSON.parse(localStorage.getItem(storageKey) || "[]");
-  registrations.push(registration);
-  localStorage.setItem(storageKey, JSON.stringify(registrations));
-
-  // Connexion future possible : envoyer registration vers un backend ou Google Sheets ici.
-}
-
 function bindAdmin() {
   document.getElementById("admin-toggle").addEventListener("click", () => {
     if (!state.isAdmin) {
@@ -629,7 +484,6 @@ function bindAdmin() {
     }
     state.isAdmin = !state.isAdmin;
     setEditableMode(state.isAdmin);
-    renderFormations();
   });
 
   document.getElementById("export-data").addEventListener("click", exportData);
@@ -651,9 +505,9 @@ function setEditableMode(isEditable) {
 
 function exportData() {
   const data = {
-    formations: state.formations,
     translations: state.translations,
-    registrations: JSON.parse(localStorage.getItem("enneagramme-inscriptions") || "[]")
+    registrations: JSON.parse(localStorage.getItem("enneagramme-inscriptions") || "[]"),
+    organizationRequests: JSON.parse(localStorage.getItem("enneagramme-demandes-organisation") || "[]")
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);

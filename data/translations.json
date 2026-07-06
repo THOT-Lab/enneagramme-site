@@ -17,7 +17,8 @@
     "formations": {
       "eyebrow": "Parcours et ateliers",
       "title": "Formations",
-      "intro": "Des journées pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle, relationnelle et professionnelle.",
+      "intro": "Des journées et des stages pour découvrir, approfondir et intégrer l'Ennéagramme dans la vie personnelle, relationnelle et professionnelle. Chaque rendez-vous mêle apports clairs, expériences vécues et temps d'intégration, dans un cadre bienveillant et respectueux du rythme de chacun.",
+      "discover": "Découvrir nos formations",
       "date": "Date",
       "time": "Horaire",
       "place": "Lieu",
@@ -96,7 +97,8 @@
     "formations": {
       "eyebrow": "Recorridos y talleres",
       "title": "Formaciones",
-      "intro": "Jornadas para descubrir, profundizar e integrar el Eneagrama en la vida personal, relacional y profesional.",
+      "intro": "Jornadas y estancias para descubrir, profundizar e integrar el Eneagrama en la vida personal, relacional y profesional. Cada encuentro combina aportes claros, experiencias vividas y tiempos de integración, en un marco cálido y respetuoso del ritmo de cada persona.",
+      "discover": "Descubrir nuestras formaciones",
       "date": "Fecha",
       "time": "Horario",
       "place": "Lugar",
@@ -170,7 +172,8 @@
     "formations": {
       "eyebrow": "Programs and workshops",
       "title": "Trainings",
-      "intro": "One-day sessions to discover, deepen and integrate the Enneagram into personal, relational and professional life.",
+      "intro": "Day sessions and retreats to discover, deepen and integrate the Enneagram into personal, relational and professional life. Each gathering blends clear teaching, lived experience and time for integration, in a caring space that respects everyone's pace.",
+      "discover": "Discover our trainings",
       "date": "Date",
       "time": "Time",
       "place": "Place",

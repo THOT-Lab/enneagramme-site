@@ -690,9 +690,248 @@ body.is-admin [contenteditable="true"] {
   border-radius: 4px;
 }
 
+/* Section formations (accueil) : bouton découvrir */
+.formations-cta-wrap {
+  margin-top: 30px;
+}
+
+/* Page "Nos formations" */
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: center;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--night);
+  background: rgba(255, 253, 248, 0.68);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.back-home:hover,
+.back-home:focus-visible {
+  color: var(--emerald-dark);
+  border-color: var(--gold);
+}
+
+.page-title {
+  font-size: 3.5rem;
+  line-height: 1.05;
+}
+
+.formations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.formation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: clamp(22px, 3vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.formation-card-body {
+  flex: 1 1 auto;
+}
+
+.formation-place {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  color: var(--emerald-dark);
+  background: rgba(216, 238, 228, 0.6);
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.formation-title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.formation-desc {
+  margin: 12px 0 0;
+  color: rgba(24, 36, 44, 0.78);
+  font-size: 1rem;
+}
+
+.formation-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0 0;
+}
+
+.formation-meta dt {
+  color: var(--brown);
+  font-size: 0.74rem;
+  font-weight: 780;
+  text-transform: uppercase;
+}
+
+.formation-meta dd {
+  margin: 3px 0 0;
+  color: var(--night);
+  font-weight: 650;
+}
+
+.formation-register {
+  align-self: stretch;
+  width: 100%;
+}
+
+.organize-card {
+  border-style: dashed;
+  border-color: rgba(0, 121, 93, 0.4);
+  background:
+    linear-gradient(135deg, rgba(216, 238, 228, 0.5), rgba(239, 228, 197, 0.35)),
+    var(--paper);
+}
+
+/* Modales (inscription / organisation) */
+.modal {
+  width: min(640px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  box-shadow: 0 30px 80px rgba(32, 52, 74, 0.28);
+}
+
+.modal::backdrop {
+  background: rgba(24, 36, 44, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.modal-panel {
+  position: relative;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.modal-panel .eyebrow {
+  margin-bottom: 8px;
+}
+
+.modal-panel h2 {
+  font-size: 1.9rem;
+  line-height: 1.15;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--night);
+  background: rgba(216, 238, 228, 0.5);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-close:hover,
+.modal-close:focus-visible {
+  background: var(--gold-soft);
+}
+
+.modal-lead {
+  margin: 12px 0 0;
+  color: rgba(24, 36, 44, 0.78);
+}
+
+.modal-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.modal-summary .summary-topic {
+  grid-column: 1 / -1;
+  background: rgba(216, 238, 228, 0.42);
+}
+
+.modal-summary .summary-topic strong {
+  text-transform: none;
+  font-size: 1rem;
+  color: var(--night);
+}
+
+.modal-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+
+.modal-fields label {
+  display: grid;
+  gap: 6px;
+  color: var(--night);
+  font-weight: 720;
+}
+
+.modal-fields .field-full {
+  grid-column: 1 / -1;
+}
+
+.modal-fields input,
+.modal-fields textarea {
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  font: inherit;
+  color: var(--ink);
+}
+
+.modal-fields textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+@media (max-width: 980px) {
+  .formations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 920px) {
   .site-header {
     grid-template-columns: auto auto 1fr;
+  }
+
+  .back-home {
+    order: 3;
+    justify-self: end;
+    padding: 8px 12px;
+  }
+
+  .back-home span:last-child {
+    display: none;
   }
 
   .mobile-menu-button {
