@@ -16,7 +16,7 @@ const DEFAULT_TRANSLATIONS = {
       home: "Accueil",
       formations: "Formations",
       types: "Aborder les Ennéatypes",
-      trainers: "Les formateurs"
+      trainers: "Le formateur"
     },
     hero: {
       eyebrow: "Formation et connaissance de soi",
@@ -71,7 +71,7 @@ const DEFAULT_TRANSLATIONS = {
     },
     trainers: {
       eyebrow: "Transmission",
-      title: "Les formateurs",
+      title: "Le formateur",
       intro: "Une approche pédagogique claire, enracinée dans l'expérience humaine et attentive au rythme de chacun.",
       yves: {
         name: "Yves Kovacs",
@@ -97,7 +97,7 @@ const DEFAULT_TRANSLATIONS = {
   },
   es: {
     site: { title: "Eneagrama", subtitle: "El camino hacia el despertar" },
-    nav: { home: "Inicio", formations: "Formaciones", types: "Abordar los Eneatipos", trainers: "Los formadores" },
+    nav: { home: "Inicio", formations: "Formaciones", types: "Abordar los Eneatipos", trainers: "El formador" },
     hero: {
       eyebrow: "Formación y autoconocimiento",
       title: "Eneagrama",
@@ -151,7 +151,7 @@ const DEFAULT_TRANSLATIONS = {
     },
     trainers: {
       eyebrow: "Transmisión",
-      title: "Los formadores",
+      title: "El formador",
       intro: "Un enfoque pedagógico claro, arraigado en la experiencia humana y atento al ritmo de cada persona.",
       yves: {
         name: "Yves Kovacs",
@@ -172,7 +172,7 @@ const DEFAULT_TRANSLATIONS = {
   },
   en: {
     site: { title: "Enneagram", subtitle: "The path toward awakening" },
-    nav: { home: "Home", formations: "Trainings", types: "Approaching the Enneatypes", trainers: "The trainers" },
+    nav: { home: "Home", formations: "Trainings", types: "Approaching the Enneatypes", trainers: "The trainer" },
     hero: {
       eyebrow: "Training and self-knowledge",
       title: "Enneagram",
@@ -226,7 +226,7 @@ const DEFAULT_TRANSLATIONS = {
     },
     trainers: {
       eyebrow: "Transmission",
-      title: "The trainers",
+      title: "The trainer",
       intro: "A clear teaching approach, rooted in human experience and attentive to each person's pace.",
       yves: {
         name: "Yves Kovacs",

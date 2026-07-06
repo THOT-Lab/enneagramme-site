@@ -638,17 +638,14 @@ h3 {
   padding: 20px;
 }
 
-.video-slot {
-  display: grid;
-  place-items: center;
-  min-height: 160px;
+.testimonial-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   margin-bottom: 18px;
-  border: 1px dashed rgba(32, 52, 74, 0.22);
   border-radius: var(--radius);
-  color: var(--brown);
-  background: rgba(216, 238, 228, 0.22);
-  font-size: 0.82rem;
-  text-transform: uppercase;
+  background: #000;
+  object-fit: cover;
 }
 
 .site-footer {
